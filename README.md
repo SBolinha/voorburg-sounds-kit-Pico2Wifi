@@ -2,6 +2,15 @@
 
 This publication is the Pico 2 W development, based on the [Amsterdam Sounds Kit](https://gitlab.waag.org/lodewijk/amsterdam-sounds-kit). It uses a **Raspberry Pi Pico 2 W** with an **SPH0645 I2S microphone**. The Pico 2 W was selected for Wi-Fi backhaul, local networking, and software gateway flexibility; it has no physical LoRaWAN transceiver. For a battery-oriented device with a real EU868 LoRaWAN radio and Things Indoor gateway, see the companion `voorburg-sounds-kit-FeatherLoraWan` publication.
 
+## Two Voorburg Sounds Kit solutions
+
+Both Voorburg builds use the same dual-core measurement approach: one core continuously captures and analyses the microphone signal, while the other core handles networking, persistence, and reporting.
+
+* **Wi-Fi solution:** [voorburg-sounds-kit-Pico2Wifi](https://github.com/SBolinha/voorburg-sounds-kit-Pico2Wifi) — Raspberry Pi Pico 2 W with Wi-Fi and a software LoRaWAN gateway path.
+* **LoRaWAN solution:** [voorburg-sounds-kit-FeatherLoraWan](https://github.com/SBolinha/voorburg-sounds-kit-FeatherLoraWan) — Adafruit Feather RP2040 RFM95 with a physical EU868 LoRaWAN radio.
+
+Choose the Pico 2 W for Wi-Fi backhaul and software gateway flexibility, or the Feather for direct LoRaWAN operation through a gateway.
+
 The dual-core division is explicit: **core 1 owns the PIO/DMA microphone driver, audio buffers, FFT, and five-minute measurement windows; core 0 owns Wi-Fi/NTP, Semtech UDP gateway transport, LoRaWAN frame/MAC/session state, flash journals, and USB logging**. A lock-free mailbox transfers only the newest complete measurement. Flash writes use a generation-matched audio pause/acknowledge handshake. Heartbeats, watchdog supervision, retained reset diagnostics, and bounded network operations improve stability compared with the Amsterdam base.
 
 Compared with the Amsterdam project, this development replaces the physical LoRa radio path with Wi-Fi plus Semtech UDP, adds LoRaWAN frame construction and MAC handling for the software gateway route, UTC window-end timestamps, persistent frame/session state, custom PIO/DMA capture, and recovery diagnostics. The result is a multi-day-capable networked Pico implementation while keeping the Amsterdam acoustic calculation basis.
