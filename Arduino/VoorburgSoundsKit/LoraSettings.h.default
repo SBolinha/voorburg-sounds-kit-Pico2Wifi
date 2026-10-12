@@ -1,0 +1,48 @@
+/*
+ * Local settings for the Voorburg Pico 2 W prototype.
+ * Fill these values locally; do not commit real Wi-Fi passwords or TTN keys.
+ */
+#ifndef VOORBURG_LORA_SETTINGS_H
+#define VOORBURG_LORA_SETTINGS_H
+
+// USB connectivity and status diagnostics.
+#define USB_LOGGING 1
+// Set to 1 to print the continuous I2S/microphone diagnostic lines.
+#define USB_MIC_LOGGING 0
+// TTN uplinks are enabled by default; set to 0 only for offline USB packet inspection.
+#define TTN_UPLINK_ENABLED 1
+// Wi-Fi backhaul for the Pico software-gateway client.
+static const char WIFI_SSID[] = "YOUR_WIFI_SSID";
+static const char WIFI_PASSWORD[] = "YOUR_WIFI_PASSWORD";
+
+// Semtech UDP identifies a gateway by its registered 64-bit EUI, not an API
+// key. Use the same 16 hexadecimal digits entered in the TTN gateway form.
+#define TTN_GATEWAY_EUI_HEX ""
+#define TTN_SEMTECH_UDP_HOST "eu1.cloud.thethings.network"
+#define TTN_SEMTECH_UDP_PORT 1700
+// Semtech rxpk requires radio measurements. These test-only metadata values
+// are synthetic because the Pico has no LoRa receiver; do not use as RF data.
+#define TTN_SEMTECH_SIMULATED_RSSI_DBM -100
+// LoRaWAN DevStatusAns margin is a signed dB value; 95% of +31 dB rounds to +29 dB.
+#define TTN_DEVICE_STATUS_MARGIN_DB 29
+// LoRaWAN battery value 0 means the Pico is externally powered.
+#define TTN_DEVICE_STATUS_BATTERY 0
+
+// The Pico must be registered as its own ABP device. Never share the Feather's
+// DevAddr, session keys, or frame-counter stream with this second transmitter.
+// Keys are written as 32 hexadecimal characters in Console display order.
+static const char LORAWAN_DEVADDR_HEX[] = "00000000";
+static const char LORAWAN_NWKSKEY_HEX[] = "00000000000000000000000000000000";
+static const char LORAWAN_APPSKEY_HEX[] = "00000000000000000000000000000000";
+
+// EU868 radio metadata used by the virtual-gateway transport. No
+// over-the-air transmission happens in this project.
+static const uint32_t TTN_UPLINK_FREQUENCY_HZ = 868300000UL;
+static const uint8_t TTN_UPLINK_SPREADING_FACTOR = 7;
+static const uint32_t TTN_UPLINK_BANDWIDTH_HZ = 125000UL;
+static const char TTN_UPLINK_CODING_RATE[] = "4/5";
+
+// Provision a reserved test FCntUp as the starting counter for the Pico device.
+static const uint32_t LORAWAN_INITIAL_FCNT_UP = 0;
+
+#endif
